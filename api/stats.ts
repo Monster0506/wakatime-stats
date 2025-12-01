@@ -68,6 +68,31 @@ const formatTime = (seconds: number): string => {
   return `${secs}s`;
 };
 
+const wrapLanguageNames = (names: string[]): string[] => {
+  const lines: string[] = [];
+  let currentLine: string[] = [];
+  let currentLength = 0;
+  const maxLength = 95; // pixels approximation
+
+  names.forEach((name) => {
+    const nameLength = name.length * 6.5 + 2; // rough estimate for monospace
+    if (currentLength + nameLength > maxLength && currentLine.length > 0) {
+      lines.push(currentLine.join(', '));
+      currentLine = [name];
+      currentLength = nameLength;
+    } else {
+      currentLine.push(name);
+      currentLength += nameLength;
+    }
+  });
+
+  if (currentLine.length > 0) {
+    lines.push(currentLine.join(', '));
+  }
+
+  return lines;
+};
+
 const fetchStats = async (username: string): Promise<WakatimeData> => {
   const response = await fetch(
     `https://wakapi.dev/api/compat/wakatime/v1/users/${username}/stats/`,
@@ -85,7 +110,8 @@ const createSvg = (data: WakatimeData['data']): string => {
   // Separate languages >= 1 hour and < 1 hour
   const majorLangs = sorted.filter((l) => l.total_seconds >= 3600);
   const minorLangs = sorted.filter((l) => l.total_seconds < 3600);
-  const minorNames = minorLangs.map((l) => l.name).join(', ');
+  const minorNames = minorLangs.map((l) => l.name);
+  const minorLines = wrapLanguageNames(minorNames);
 
   const codingCategory = data.categories.find((c) => c.name === 'coding');
   const codingPercent = codingCategory?.percent || 0;
@@ -103,7 +129,7 @@ const createSvg = (data: WakatimeData['data']): string => {
   const headerHeight = 150;
   const langRowHeight = 36;
   const maxRows = Math.max(leftCol.length, rightCol.length);
-  const minorHeight = minorLangs.length > 0 ? 40 : 0;
+  const minorHeight = minorLangs.length > 0 ? minorLines.length * 16 + 8 : 0;
   const height = headerHeight + maxRows * langRowHeight + minorHeight + 40;
 
   const createColumn = (languages: Language[], startX: number): string => {
@@ -139,11 +165,19 @@ const createSvg = (data: WakatimeData['data']): string => {
   const minorSection =
     minorLangs.length > 0
       ? `
-        <text x="450" y="${headerHeight + maxRows * langRowHeight + 20}"
-          font-family="system-ui, -apple-system, sans-serif"
-          font-size="12" fill="#94A3B8" text-anchor="middle">
-          ${escapeXml(minorNames)}: &lt;1hr
-        </text>
+        <g>
+          ${minorLines
+            .map(
+              (line, i) => `
+            <text x="450" y="${headerHeight + maxRows * langRowHeight + 12 + i * 16}"
+              font-family="system-ui, -apple-system, sans-serif"
+              font-size="11" fill="#94A3B8" text-anchor="middle">
+              ${escapeXml(line)}${i === minorLines.length - 1 ? ': &lt;1hr' : ''}
+            </text>
+          `
+            )
+            .join('')}
+        </g>
       `
       : '';
 
