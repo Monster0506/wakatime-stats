@@ -32,7 +32,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Svelte: '#FF3E00',
   Vue: '#4FC08D',
   React: '#61DAFB',
-  HTML: '#FF922F',
+  HTML: '#E34C26',
   CSS: '#563D7C',
   Bash: '#4EAA25',
   SQL: '#336791',
@@ -272,4 +272,5 @@ export default async function handler(
     res.send(createErrorSvg(msg));
   }
 }
+
 
