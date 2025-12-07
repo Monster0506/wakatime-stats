@@ -32,7 +32,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Svelte: '#FF3E00',
   Vue: '#4FC08D',
   React: '#61DAFB',
-  HTML: '#E34C26',
+  HTML: '#FF922F',
   CSS: '#563D7C',
   Bash: '#4EAA25',
   SQL: '#336791',
@@ -41,6 +41,9 @@ const LANGUAGE_COLORS: Record<string, string> = {
   ASM: '#6E4C13',
   Json: '#F7DF1E',
   YAML: '#CB171E',
+  R: '#F34FA4',
+  Rmd: '#E82EE7',
+  Quarto: '#7F1ABB',
   default: '#8B5CF6',
 };
 
