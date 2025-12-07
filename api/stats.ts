@@ -41,6 +41,9 @@ const LANGUAGE_COLORS: Record<string, string> = {
   ASM: '#6E4C13',
   Json: '#F7DF1E',
   YAML: '#CB171E',
+  R: '#F34FA4',
+  Rmd: '#E82EE7',
+  Quarto: '#7F1ABB',
   default: '#8B5CF6',
 };
 
@@ -57,7 +60,7 @@ const escapeXml = (str: string): string =>
 const formatTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
+  const secs = Math.floor(seconds % 60);
 
   if (hours > 0) {
     return `${hours}h ${minutes}m`;
@@ -269,4 +272,5 @@ export default async function handler(
     res.send(createErrorSvg(msg));
   }
 }
+
 
