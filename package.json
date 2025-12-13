@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "next": "^16.0.6"
+    "next": "16.0.10"
   }
 }
