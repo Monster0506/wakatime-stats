@@ -92,7 +92,7 @@ const createSvg = (data: WakatimeData['data']): string => {
   const maxPercent = Math.max(...sorted.map((l) => l.percent));
 
   // Calculate average per day: total / 30
-  const avgDailySeconds = data.total_seconds / 71;
+  const avgDailySeconds = data.total_seconds / 84;
   const avgDisplay = formatTime(avgDailySeconds);
 
   const mid = Math.ceil(sorted.length / 2);
@@ -272,6 +272,7 @@ export default async function handler(
     res.send(createErrorSvg(msg));
   }
 }
+
 
 
 
